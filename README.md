@@ -6,6 +6,7 @@ Nota  :
 Genero:
 
 Ingresar ALUMNOS
+
 Eliminar un Estudiante.()
 Modificar la Informacion de Un Estudiante. ()  
 Buscar un Estudiante  ()
