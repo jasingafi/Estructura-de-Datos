@@ -1,115 +1,305 @@
-#include<iostream>
+#include <iostream>
 #include<cstdlib> //Usat getline
-#include<iomanip> //usar setw
+#include<iomanip>
 using namespace std;
 
-void ingresar(struct alumno est[50], int numero);
-void mostrarnombre(struct alumno est[50], int numero);
-void aprobados(struct alumno est[50], int numero);
-void reprobados(struct alumno est[50], int numero);
-void notamayor(struct alumno est[50], int numero);
-int numero;
+#define VOLVER_MENU cout<<"\n\nPRESIONE ENTER PARA VOLVER AL MENU"; setbuf(stdin, NULL); cin.get(); 
 
-int mayor;
 
-struct alumno{
-	int ID;
-	char nombre[50];
+struct nodo
+{
+	string nombre;
+	double id;
+	string asignatura;
+	string genero;
 	int nota;
+	nodo *siguiente;      
 };
 
-int main ()
+nodo *pIni = NULL; 
+nodo *pFin;
+nodo *p;
+
+char op = 'n';
+int cont = 0;
+int i = 0;
+int enc =0;
+int mayor;
+
+
+void cargar();
+void mostrarlista();
+void cargarnodo(nodo *x);
+void consultar();
+void eliminar();
+void borrarNodo();
+void aprobados();
+void reprobados();
+
+
+int main()
 {
-	struct alumno est[50];
-	int numero;
-	cout<<"Numero de Estudiantes: ";
-	cin>>numero;
 	
-	ingresar(est, numero);
-	cout<<"\n";
+	do{          
+		system("cls");       
+		cout<<"Registrar estudiante ------------(1)     (Personas ingresadas) "<<cont<<endl;        
+		cout<<"Mostrar lista de estudiantes ----(2)\n";  
+		cout<<"Buscar un estudiante ------------(3)\n";
+		cout<<"Mostrar aprobados ---------------(4)\n";
+		cout<<"Mostrar reprobados --------------(5)\n";
+		cout<<"Eliminar Todos los estudiantes --(6)\n";
+		cout<<"Eliminar estudiante por id ------(7)\n";
+		cout<<"Salir ---------------------------(8)\n"; 
+		cin.get(op);
+		if(toupper(op) == '1')
+		{ 
+			cargar();
+		}    
+		else if(toupper(op) == '2')
+		   mostrarlista();
+		else if(toupper(op) == '3')
+			consultar();
+		else if(toupper(op) == '4')
+			aprobados();
+		else if(toupper(op) == '5')
+			reprobados();
+		else if(toupper(op) == '6')
+			eliminar();
+		else if(toupper(op) == '7')
+			borrarNodo();              
+	}while(toupper(op) != '8');
+	p = pIni;
+	if(p != NULL)
+	{
+		nodo *aux;
+		while(p!=NULL)
+		{  
+			aux = new nodo;
+			aux = pIni;
+			pIni = pIni->siguiente;
+			free(aux);
+			p = p->siguiente;                         
+		}
+	} 
+	return 0;
 	
-	mostrarnombre(est, numero);//Muestra listado de alumnos
-	cout<<"\n\n";
-	aprobados(est, numero);//Muestra listado de alumnos aprobados
-	cout<<"\n\n";
-	reprobados(est, numero);//Muestra listado de alumnos reprobados
-	cout<<"\n\n";
-	notamayor(est, numero);//Muestra la nota mayor
-	cout<<"\n\n";
-
-	return 0;	
 }
 
-void ingresar(struct alumno est[50], int numero){
+
+void mostrarlista()
+{
 	
-	for(int i=0; i<numero; i++){
-		system ("CLS");
-		est[i].ID = i + 1;
-		cout<<"ID: "<<est[i].ID<<endl;
-		cin.ignore();
-		cout<<"Nombre del Alumno: ";
-		cin.getline(est[i].nombre,50);
-		cout<<"Nota: ";
-		cin>>est[i].nota,50;
+	system("cls");
+	if(pIni != NULL)
+	{ 
+		p = pIni;
+		i = 0;
+		while (p->siguiente != NULL)
+		{ 
+			i++;
+			cout<<i<<"Direccion : "<<int(p)<<endl;
+			cout<<i<<".1) Numero de Cuenta: "<<p->id<<endl;
+			cout<<i<<".2) Nombre: "<<p->nombre<<endl;
+			cout<<i<<".3) Genero: "<<p->genero<<endl;
+			cout<<i<<".4) Asignatura: "<<p->asignatura<<endl;
+		    cout<<i<<".5) Nota: "<<p->nota<<endl<<endl;
+			p = p->siguiente;
+		}     
+	}else
+	   cout<<"NO HAY ESTUDIANTES REGISTRADOS PARA MOSTAR";
+	VOLVER_MENU
+}
+
+
+void cargar()
+{
+	if(pIni == NULL)  
+	{       
+		pIni = new nodo;
+		pFin = new nodo;
+		pIni->siguiente = pFin;           
+		pFin->siguiente = NULL;           
+		cargarnodo(pIni);                 
 	}
-}
-
-//Mostrar listado de alumnos
-void mostrarnombre(struct alumno est[50], int numero){
-	cout<<"Listado General de Alumnos "<<endl;
-	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
-	cout<<setw(7)<<"ID"<<setw(20)<<"Nombre del Alumno"<<endl;	
-	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
-	
-	for(int i=0; i<numero; i++){
-		cout<<setw(7)<<est[i].ID<<setw(20)<<est[i].nombre<<endl;
+	else                                
+	{
+		cargarnodo(pFin);                      
+		pFin->siguiente = new nodo;         
+		pFin = pFin->siguiente;           
+		pFin->siguiente = NULL;              
 	}
+	cont++;
+	p = pIni;
 }
 
-//Alumnos que Aprobaron
-void aprobados(struct alumno est[50], int numero){
-	cout<<"***** Listado de Alumno Aprobaron ***** "<<endl;
+void cargarnodo(nodo *x)
+{
+	system("cls");
+	cout<<"Introduzca el Numero de Cuenta: ";
+	cin>>x->id;	
+	cout<<"Introduzca el nombre del estudiante: ";
+	cin>>x->nombre;
+	cout<<"Introduzca el genero: ";
+	cin>>x->genero;  
+	cout<<"Introduzca la Asignatura: ";
+	cin>>x->asignatura;
+	cout<<"Introduzca la nota: ";
+	cin>>x->nota;  
+	 
+}
+
+void consultar()
+{
+	system("cls");
+	p = pIni;          
+	if(p != NULL)
+	{
+		nodo *c = NULL;
+		c = new nodo;              
+		cout<<"INGRESE El NUMERO DE CUENTA DEL ESTUDIANTE QUE DESEA CONSULTAR\n";
+		cin>>c->id;
+		enc = 0;
+		while(p != NULL)
+		{    
+			if(c->id == p->id)
+			{  
+				enc = 1;         
+				cout<<i<<"Direccion : "<<int(p)<<endl;
+				cout<<i<<".1) Numero de Cuenta: "<<p->id<<endl;
+				cout<<i<<".2) Nombre: "<<p->nombre<<endl;
+				cout<<i<<".3) Genero: "<<p->genero<<endl;
+				cout<<i<<".4) Asignatura: "<<p->asignatura<<endl;
+				cout<<i<<".5) Nota: "<<p->nota<<endl<<endl;
+				
+			}
+			p = p->siguiente;
+		}     
+		if(enc == 0)
+		{
+			cout<<"\n\nESTUDIANTE NO ENCONTRADO";
+		}  
+		free(c);
+	}else
+	   cout<<"NO HAY ESTUDIANTES REGISTRADOS PARA CONSULTAR";
+	VOLVER_MENU   
+}  
+
+
+void eliminar()
+{
+	system("cls");
+	p = pIni;
+	if(p!=NULL)
+	{
+		nodo *aux;
+		aux = new nodo;
+		while(p->siguiente != NULL)
+		{       
+			aux = pIni;
+			pIni = pIni->siguiente;
+			free(aux);
+			p = p->siguiente;                         
+		}
+		cout<<"ESTUDIANTES ELIMINADOS";                
+		cont = 0;     
+		
+	}else   
+	   cout<<"NO HAY ESTUDIANTES REGISTRADOS PARA ELIMINAR";
+	VOLVER_MENU       
+}
+
+
+void borrarNodo()
+{
+	system("cls");
+	p = pIni; 
+	if(p)
+	{
+		
+		nodo *aux = NULL, *ant = NULL;
+		ant = new nodo;  
+		aux = new nodo;
+		cout<<"INTRODUZCA EL NUMERO DE CUENTA DEL ESTUDIANTE QUE DESEA ELIMINAR\n";
+		cin>>aux->id;
+		while(aux->id != p->id)
+		{
+			ant = p;
+			p = p->siguiente;
+		}            
+		if(aux->id == p->id)
+		{                   
+			ant = p;
+			p = p->siguiente;                
+			free(ant);
+			free(aux);
+			cout<<"ESTUDIANTE ELIMINADO";
+			cont--;
+		}                                 
+	}else   
+	   cout<<"ESTUDIANTE NO ENCONTRADO";
+	VOLVER_MENU       
+}
+
+
+
+void reprobados()
+{
+	
+	system("cls");
+	if(pIni != NULL)
+	{ 
+	cout<<"***** Listado de Estudiantes que Reprobaron ***** "<<endl;
 	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
 	cout<<setw(7)<<setw(20)<<"Nombre del Alumno"<<setw(15)<<"Nota"<<endl;	
 	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
-	
-	for(int i=0; i<numero; i++){
-		if(est[i].nota>65)
-			{
-				cout<<setw(7)<<setw(20)<<est[i].nombre<<setw(15)<<est[i].nota<<endl;
+		
+		p = pIni;
+		i = 0;
+		while (p->siguiente != NULL)
+		{ 
+			i++;
+			
+			if(p->nota<65)
+			{  
+				
+				
+				cout<<setw(7)<<setw(20)<<p->nombre<<setw(15)<<p->nota<<endl;
 			}
-	}
+			
+			p = p->siguiente;
+		}     
+	}else
+	   cout<<"NO HAY ESTUDIANTES REPROBADOS PARA MOSTAR";
+	VOLVER_MENU
 }
 
-//Alumnos Reprobados
-void reprobados(struct alumno est[50], int numero){
-	cout<<"***** Listado de Alumno que Reprobados ***** "<<endl;
-	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
-	cout<<setw(7)<<"Nombre del Alumno"<<setw(15)<<"Nota"<<endl;	
-	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
-	
-	for(int i=0; i<numero; i++){
-		if(est[i].nota<65)
-			{
-				cout<<setw(7)<<setw(20)<<est[i].nombre<<setw(15)<<est[i].nota<<endl;
-			}
-	}
-}
 
-//Alumno con nota mayor
-void notamayor(struct alumno est[50], int numero){
-	cout<<"***** Alumno con nota mayor ***** "<<endl;
-	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
-	cout<<setw(7)<<"Nombre del Alumno"<<setw(10)<<"Nota"<<endl;	
-	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+void aprobados()
+{
 	
-	for(int i=0; i<numero; i++){
+	system("cls");
+	if(pIni != NULL)
+	{ 
+		
+	cout<<"***** Listado de Estudiantes que Aprobaron ***** "<<endl;
+	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+	cout<<setw(7)<<setw(20)<<"Nombre del Alumno"<<setw(15)<<"Nota"<<endl;	
+	cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+
+		p = pIni;
+		i = 0;
+		while (p->siguiente != NULL)
+		{ 
+			i++;
+			if(p->nota>65)
+			{  
+				cout<<setw(7)<<setw(20)<<p->nombre<<setw(15)<<p->nota<<endl;
+			}
 			
-		if(est[i].nota>mayor)
-		{
-			mayor = est[i].nota;
-			
-			cout<<setw(7)<<est[i].nombre<<setw(15)<<est[i].nota<<endl;
-		}
-	}
+			p = p->siguiente;
+		}     
+	}else
+	   cout<<"NO HAY ESTUDIANTES APROBADOS PARA MOSTAR";
+	
+	VOLVER_MENU
 }
