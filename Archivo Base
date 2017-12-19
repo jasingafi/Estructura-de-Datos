@@ -9,8 +9,7 @@ using namespace std;
 struct nodo
 {
 	string nombre;
-	int id;
-	int cuenta;
+	double id;
 	string asignatura;
 	string genero;
 	int nota;
@@ -99,12 +98,11 @@ void mostrarlista()
 		{ 
 			i++;
 			cout<<i<<"Direccion : "<<int(p)<<endl;
-			cout<<i<<".1) Numero de Cuenta: "<<p->cuenta<<endl;
-			cout<<i<<".2) Id: "<<p->id<<endl;
-			cout<<i<<".3) Nombre: "<<p->nombre<<endl;
-			cout<<i<<".4) Genero: "<<p->genero<<endl;
-			cout<<i<<".5) Asignatura: "<<p->asignatura<<endl;
-		    cout<<i<<".6) Nota: "<<p->nota<<endl<<endl;
+			cout<<i<<".1) Numero de Cuenta: "<<p->id<<endl;
+			cout<<i<<".2) Nombre: "<<p->nombre<<endl;
+			cout<<i<<".3) Genero: "<<p->genero<<endl;
+			cout<<i<<".4) Asignatura: "<<p->asignatura<<endl;
+		    cout<<i<<".5) Nota: "<<p->nota<<endl<<endl;
 			p = p->siguiente;
 		}     
 	}else
@@ -137,17 +135,15 @@ void cargar()
 void cargarnodo(nodo *x)
 {
 	system("cls");
-	cout<<"introduzca el numero de cuenta: ";
-	cin>>x->cuenta;  
-	cout<<"introduzca el id: ";
+	cout<<"Introduzca el Numero de Cuenta: ";
 	cin>>x->id;	
-	cout<<"introduzca el nombre del estudiante: ";
+	cout<<"Introduzca el nombre del estudiante: ";
 	cin>>x->nombre;
-	cout<<"introduzca el genero: ";
+	cout<<"Introduzca el genero: ";
 	cin>>x->genero;  
-	cout<<"introduzca la Asignatura: ";
+	cout<<"Introduzca la Asignatura: ";
 	cin>>x->asignatura;
-	cout<<"introduzca la nota: ";
+	cout<<"Introduzca la nota: ";
 	cin>>x->nota;  
 	 
 }
@@ -160,7 +156,7 @@ void consultar()
 	{
 		nodo *c = NULL;
 		c = new nodo;              
-		cout<<"INGRESE ID DEL ESTUDIANTE QUE DESEA CONSULTAR\n";
+		cout<<"INGRESE El NUMERO DE CUENTA DEL ESTUDIANTE QUE DESEA CONSULTAR\n";
 		cin>>c->id;
 		enc = 0;
 		while(p != NULL)
@@ -169,12 +165,11 @@ void consultar()
 			{  
 				enc = 1;         
 				cout<<i<<"Direccion : "<<int(p)<<endl;
-				cout<<i<<".1) Numero de Cuenta: "<<p->cuenta<<endl;
-				cout<<i<<".2) Id: "<<p->id<<endl;
-				cout<<i<<".3) Nombre: "<<p->nombre<<endl;
-				cout<<i<<".4) Genero: "<<p->genero<<endl;
-				cout<<i<<".5) Asignatura: "<<p->asignatura<<endl;
-				cout<<i<<".6) Nota: "<<p->nota<<endl<<endl;
+				cout<<i<<".1) Numero de Cuenta: "<<p->id<<endl;
+				cout<<i<<".2) Nombre: "<<p->nombre<<endl;
+				cout<<i<<".3) Genero: "<<p->genero<<endl;
+				cout<<i<<".4) Asignatura: "<<p->asignatura<<endl;
+				cout<<i<<".5) Nota: "<<p->nota<<endl<<endl;
 				
 			}
 			p = p->siguiente;
@@ -224,7 +219,7 @@ void borrarNodo()
 		nodo *aux = NULL, *ant = NULL;
 		ant = new nodo;  
 		aux = new nodo;
-		cout<<"INTRODUZCA EL ID DEL ESTUDIANTE QUE DESEA ELIMINAR\n";
+		cout<<"INTRODUZCA EL NUMERO DE CUENTA DEL ESTUDIANTE QUE DESEA ELIMINAR\n";
 		cin>>aux->id;
 		while(aux->id != p->id)
 		{
